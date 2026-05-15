@@ -1,0 +1,140 @@
+{
+    "description": "Sample test data for Rento API testing",
+    "note": "Import these into your Firestore database for testing",
+    
+    "products": [
+        {
+            "id": "prod_sample1",
+            "title": "Canon EOS R5 Camera",
+            "description": "Professional mirrorless camera with 45MP full-frame sensor, 8K video recording. Perfect for photography enthusiasts and professionals.",
+            "price_per_day": 1500,
+            "deposit": 10000,
+            "category": "electronics",
+            "images": [
+                "https://example.com/images/camera1.jpg",
+                "https://example.com/images/camera2.jpg"
+            ],
+            "owner_id": "user_owner_001",
+            "created_at": "2024-01-15T10:00:00Z",
+            "status": "available"
+        },
+        {
+            "id": "prod_sample2",
+            "title": "Mountain Bike - Trek X",
+            "description": "High-quality mountain bike for off-road adventures. Suspension, disc brakes, 21-speed.",
+            "price_per_day": 300,
+            "deposit": 2000,
+            "category": "sports",
+            "images": [
+                "https://example.com/images/bike1.jpg"
+            ],
+            "owner_id": "user_owner_002",
+            "created_at": "2024-01-16T10:00:00Z",
+            "status": "available"
+        },
+        {
+            "id": "prod_sample3",
+            "title": "Camping Tent - 4 Person",
+            "description": " waterproof tent, easy setup, suitable for family camping. Includes carrying bag.",
+            "price_per_day": 200,
+            "deposit": 1000,
+            "category": "outdoor",
+            "images": [
+                "https://example.com/images/tent1.jpg"
+            ],
+            "owner_id": "user_owner_001",
+            "created_at": "2024-01-17T10:00:00Z",
+            "status": "available"
+        },
+        {
+            "id": "prod_sample4",
+            "title": "DJI Mavic Air 2 Drone",
+            "description": "4K camera drone with 3-axis gimbal, 34-min flight time. Includes extra batteries.",
+            "price_per_day": 800,
+            "deposit": 5000,
+            "category": "electronics",
+            "images": [
+                "https://example.com/images/drone1.jpg"
+            ],
+            "owner_id": "user_owner_003",
+            "created_at": "2024-01-18T10:00:00Z",
+            "status": "available"
+        },
+        {
+            "id": "prod_sample5",
+            "title": "Power Washer - Karcher K5",
+            "description": "High-pressure washer for car and home cleaning. 2000 PSI, electric powered.",
+            "price_per_day": 250,
+            "deposit": 1500,
+            "category": "tools",
+            "images": [
+                "https://example.com/images/washer1.jpg"
+            ],
+            "owner_id": "user_owner_002",
+            "created_at": "2024-01-19T10:00:00Z",
+            "status": "available"
+        }
+    ],
+
+    "users": [
+        {
+            "id": "user_owner_001",
+            "phone": "+911234567890",
+            "kyc_status": "verified",
+            "rating": 4.8,
+            "total_ratings": 15,
+            "created_at": "2024-01-01T10:00:00Z"
+        },
+        {
+            "id": "user_owner_002",
+            "phone": "+911234567891",
+            "kyc_status": "verified",
+            "rating": 4.5,
+            "total_ratings": 8,
+            "created_at": "2024-01-05T10:00:00Z"
+        },
+        {
+            "id": "user_owner_003",
+            "phone": "+911234567892",
+            "kyc_status": "verified",
+            "rating": 5.0,
+            "total_ratings": 3,
+            "created_at": "2024-01-10T10:00:00Z"
+        },
+        {
+            "id": "user_renter_001",
+            "phone": "+911234567899",
+            "kyc_status": "verified",
+            "rating": 4.2,
+            "total_ratings": 12,
+            "created_at": "2024-01-02T10:00:00Z"
+        },
+        {
+            "id": "user_renter_002",
+            "phone": "+911234567898",
+            "kyc_status": "verified",
+            "rating": 4.6,
+            "total_ratings": 20,
+            "created_at": "2024-01-03T10:00:00Z"
+        }
+    ],
+
+    "categories": [
+        "electronics",
+        "sports",
+        "outdoor",
+        "tools",
+        "vehicles",
+        "photography",
+        "gaming",
+        "music",
+        "party",
+        "home"
+    ],
+
+    "testing_notes": {
+        "how_to_import": "Use Firebase Console or Firebase Admin SDK to import these documents",
+        "test_scenario": "1. Create a booking with user_renter_001 for prod_sample1\n2. Create payment (simulate Razorpay)\n3. Generate and verify OTP\n4. Complete rental cycle\n5. Rate the user",
+        "auth_tokens": "Use Firebase Auth to generate valid ID tokens for testing"
+    }
+}
