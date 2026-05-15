@@ -1,33 +1,8 @@
-const admin = require('firebase-admin');
-const User = require('../models/User');
-
-// Initialize Firebase Admin
-try {
-    if (!admin.apps.length) {
-        const path = require('path');
-        const fs = require('fs');
-        const serviceAccountPath = path.join(__dirname, '../config/firebase-service-account.json');
-
-        if (fs.existsSync(serviceAccountPath)) {
-            const serviceAccount = require(serviceAccountPath);
-            admin.initializeApp({
-                credential: admin.credential.cert(serviceAccount)
-            });
-            console.log('✅ Firebase Admin initialized with service account.');
-        } else {
-            // Fallback for development (requires GOOGLE_APPLICATION_CREDENTIALS env or being on GCP)
-            admin.initializeApp({
-                credential: admin.credential.applicationDefault(),
-            });
-            console.log('📡 Firebase Admin initialized with default credentials.');
-        }
-    }
-} catch (error) {
-    console.warn('⚠️ Firebase Admin could not be initialized. Push notifications will be simulated.', error.message);
-}
+const { supabase } = require('../config/supabase');
 
 /**
- * Send push notification to a specific user
+ * Send notification to a specific user
+ * (Currently records to database, push notifications will be integrated with Supabase edge functions/external service)
  * @param {string} userId - Target user ID
  * @param {string} title - Notification title
  * @param {string} body - Notification body
@@ -35,29 +10,38 @@ try {
  */
 async function sendPushNotification(userId, title, body, data = {}) {
     try {
-        const user = await User.findById(userId);
-        if (!user || !user.fcmToken) {
-            console.log(`[Push Notification] Skipped for user ${userId}: No FCM token`);
+        // 1. Record in Database
+        const { error: dbError } = await supabase
+            .from('notifications')
+            .insert({
+                user_id: userId,
+                title,
+                message: body,
+                payload: data,
+                read: false
+            });
+
+        if (dbError) throw dbError;
+
+        // 2. Fetch User for logging
+        const { data: user, error: userError } = await supabase
+            .from('users')
+            .select('email, fcm_token')
+            .eq('id', userId)
+            .single();
+
+        if (userError) {
+            console.log(`[Notification] Database entry created, but could not fetch user info for userId: ${userId}`);
             return;
         }
 
-        const message = {
-            notification: { title, body },
-            data: {
-                ...data,
-                click_action: 'FLUTTER_NOTIFICATION_CLICK',
-            },
-            token: user.fcmToken
-        };
-
-        if (admin.apps.length) {
-            const response = await admin.messaging().send(message);
-            console.log(`[Push Notification] Sent successfully: ${response}`);
-        } else {
-            console.log(`[Push Notification Mock] To: ${user.email} | Title: ${title} | Body: ${body}`);
-        }
+        // 3. Log (Mocking real push for now)
+        console.log(`[Notification Mock] Recorded for: ${user.email} | Title: ${title} | Body: ${body}`);
+        
+        // FUTURE: Trigger external push provider via FCM/OneSignal here
+        
     } catch (error) {
-        console.error('[Push Notification] Error sending:', error);
+        console.error('[Notification Service Error]:', error);
     }
 }
 
