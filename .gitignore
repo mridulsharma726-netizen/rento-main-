@@ -65,6 +65,7 @@ uploads/
 Thumbs.db
 
 # Mobile specific
+frontend/ios/Runner/GoogleService-Info.plist
 frontend/ios/Flutter/Generated.xcconfig
 frontend/ios/Flutter/flutter_export_environment.sh
 frontend/android/app/src/main/res/raw/
